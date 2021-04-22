@@ -5,13 +5,21 @@
 
 CONFIG_STANDALONE_LOAD_ADDR ?= 0x40000
 LDFLAGS_FINAL += --gc-sections
+ifneq ($(CONFIG_PPC64),y)
 LDFLAGS_FINAL += --bss-plt
-PLATFORM_RELFLAGS += -fpic -mrelocatable -ffunction-sections \
--fdata-sections -mcall-linux
+else
+LDFLAGS_FINAL += -pie
+endif
+PLATFORM_RELFLAGS += -fpic -ffunction-sections \
+-fdata-sections
 
 PF_CPPFLAGS_POWERPC	:= $(call cc-option,-fno-ira-hoist-pressure,)
-PLATFORM_CPPFLAGS += -D__powerpc__ -ffixed-r2 -m32 $(PF_CPPFLAGS_POWERPC)
+PLATFORM_CPPFLAGS += -D__powerpc__ $(PF_CPPFLAGS_POWERPC)
+ifneq ($(CONFIG_PPC64),y)
+PLATFORM_CPPFLAGS += -ffixed-r2 -m32
 KBUILD_LDFLAGS  += -m32 -melf32ppclinux
+PLATFORM_RELFLAGS += -mcall-linux
+endif
 
 #
 # When cross-compiling on NetBSD, we have to define __PPC__ or else we

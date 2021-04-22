@@ -1,0 +1,9 @@
+if TARGET_ARTY_A7
+
+config SYS_BOARD
+	default "arty_a7"
+
+config SYS_CONFIG_NAME
+	default "microwatt"
+
+endif

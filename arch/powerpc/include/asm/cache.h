@@ -11,7 +11,7 @@
 #define	L1_CACHE_SHIFT	4
 #elif defined(CONFIG_PPC64BRIDGE)
 #define L1_CACHE_SHIFT	7
-#elif defined(CONFIG_E500MC)
+#elif defined(CONFIG_E500MC) || defined(CONFIG_MICROWATT)
 #define L1_CACHE_SHIFT	6
 #else
 #define	L1_CACHE_SHIFT	5

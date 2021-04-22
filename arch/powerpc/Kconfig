@@ -4,6 +4,12 @@ menu "PowerPC architecture"
 config SYS_ARCH
 	default "powerpc"
 
+config PPC64
+	bool
+
+config CPU_LITTLE_ENDIAN
+	bool
+
 choice
 	prompt "CPU select"
 	optional
@@ -31,10 +37,17 @@ config MPC8xx
 	imply CMD_REGINFO
 	imply WDT_MPC8xx
 
+config MICROWATT
+	bool "Microwatt"
+	select PPC64
+	select ENV_IS_IN_FLASH
+	select CPU_LITTLE_ENDIAN
+
 endchoice
 
 config HIGH_BATS
 	bool "Enable high BAT registers"
+	depends on !PPC64
 	help
 	  Enable BATs (block address translation registers) 4-7 on machines
 	  that support them.
@@ -42,6 +55,7 @@ config HIGH_BATS
 source "arch/powerpc/cpu/mpc83xx/Kconfig"
 source "arch/powerpc/cpu/mpc85xx/Kconfig"
 source "arch/powerpc/cpu/mpc8xx/Kconfig"
+source "arch/powerpc/cpu/microwatt/Kconfig"
 source "arch/powerpc/lib/Kconfig"
 
 endmenu

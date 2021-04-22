@@ -30,7 +30,9 @@ obj-y	+= ppccache.o
 ifndef CONFIG_TIMER
 obj-y	+= ticks.o
 endif
+ifneq ($(CONFIG_PPC64),y)
 obj-y	+= reloc.o
+endif
 
 obj-$(CONFIG_BAT_RW) += bat_rw.o
 obj-$(CONFIG_CMD_BOOTM) += bootm.o

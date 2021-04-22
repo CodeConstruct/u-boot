@@ -94,12 +94,10 @@ struct arch_global_data {
 
 #include <asm-generic/global_data.h>
 
-#if 1
+#ifndef CONFIG_PPC64
 #define DECLARE_GLOBAL_DATA_PTR     register volatile gd_t *gd asm ("r2")
-#else /* We could use plain global data, but the resulting code is bigger */
-#define XTRN_DECLARE_GLOBAL_DATA_PTR	extern
-#define DECLARE_GLOBAL_DATA_PTR     XTRN_DECLARE_GLOBAL_DATA_PTR \
-				    gd_t *gd
+#else /* We could use plain global data for 32-bit, but the resulting code is bigger */
+#define DECLARE_GLOBAL_DATA_PTR     extern gd_t *gd
 #endif
 
 #endif /* __ASM_GBL_DATA_H */

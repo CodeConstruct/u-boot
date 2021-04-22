@@ -3,6 +3,8 @@
 
 #include <asm/types.h>
 
+#ifndef CONFIG_CPU_LITTLE_ENDIAN
+
 #ifdef __GNUC__
 
 static __inline__ unsigned ld_le16(const volatile unsigned short *addr)
@@ -81,4 +83,10 @@ static __inline__ __attribute__((const)) __u32 ___arch__swab32(__u32 value)
 #endif
 #include <linux/byteorder/big_endian.h>
 
+#else /* CPU_LITTLE_ENDIAN */
+
+#define __BYTEORDER_HAS_U64__
+#include <linux/byteorder/little_endian.h>
+
+#endif /* CPU_LITTLE_ENDIAN */
 #endif /* _PPC_BYTEORDER_H */

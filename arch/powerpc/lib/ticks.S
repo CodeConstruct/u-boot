@@ -18,11 +18,15 @@
  */
 	.globl	get_ticks
 get_ticks:
+#ifndef CONFIG_PPC64
 1:	mftbu	r3
 	mftb	r4
 	mftbu	r5
 	cmp	0,r3,r5
 	bne	1b
+#else
+	mfspr	r3, 268
+#endif
 	blr
 
 /*
@@ -30,6 +34,7 @@ get_ticks:
  */
 	.globl	wait_ticks
 wait_ticks:
+#ifndef CONFIG_PPC64
 	stwu	r1, -16(r1)
 	mflr	r0		/* save link register */
 	stw	r0, 20(r1)	/* Use r0 or GDB will be unhappy */
@@ -53,4 +58,11 @@ wait_ticks:
 	lwz     r0, 20(r1)
 	addi	r1,r1,16
 	mtlr	r0
+#else
+	mfspr	r4, 268
+	add	r3, r3, r4
+1:	mfspr	r4, 268
+	cmpld	r4, r3
+	blt	1b
+#endif
 	blr

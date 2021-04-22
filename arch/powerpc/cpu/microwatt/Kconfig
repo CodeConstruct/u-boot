@@ -1,0 +1,18 @@
+menu "microwatt CPU"
+	depends on MICROWATT
+
+config SYS_CPU
+	default "microwatt"
+
+choice
+	prompt "Target select"
+	optional
+
+config TARGET_ARTY_A7
+	bool "Support Arty A7 board"
+
+endchoice
+
+source "board/arty_a7/Kconfig"
+
+endmenu

@@ -159,6 +159,7 @@ static inline void __raw_writel(unsigned int v, volatile void __iomem *addr)
 	*(volatile unsigned int *)PCI_FIX_ADDR(addr) = v;
 }
 
+#ifndef CONFIG_PPC64
 /*
  * 8, 16 and 32 bit, big and little endian I/O operations, with barrier.
  *
@@ -248,6 +249,84 @@ static inline void out_be32(volatile unsigned __iomem *addr, u32 val)
 {
 	__asm__ __volatile__("sync; stw%U0%X0 %1,%0" : "=m" (*addr) : "r" (val));
 }
+
+#else /* PPC64 */
+/* Assume LE microwatt and use cache-inhibited accessors */
+static inline u8 in_8(const volatile unsigned char __iomem *addr)
+{
+	u8 ret;
+
+	__asm__ __volatile__("lbzcix %0,0,%1" : "=r" (ret)
+			     : "r" (addr), "m" (*addr));
+	return ret;
+}
+
+static inline void out_8(volatile unsigned char __iomem *addr, u8 val)
+{
+	__asm__ __volatile__("stbcix %1,0,%2" : "=m" (*addr)
+			     : "r" (val), "r" (addr));
+}
+
+static inline u16 in_le16(const volatile unsigned short __iomem *addr)
+{
+	u16 ret;
+
+	__asm__ __volatile__("lhzcix %0,0,%1" : "=r" (ret)
+			     : "r" (addr), "m" (*addr));
+	return ret;
+}
+
+static inline u16 in_be16(const volatile unsigned short __iomem *addr)
+{
+	__be16 ret;
+
+	__asm__ __volatile__("lhzcix %0,0,%1" : "=r" (ret)
+			     : "r" (addr), "m" (*addr));
+	return be16_to_cpu(ret);
+}
+
+static inline void out_le16(volatile unsigned short __iomem *addr, u16 val)
+{
+	__asm__ __volatile__("sthcix %1,0,%2" : "=m" (*addr)
+			     : "r" (val), "r" (addr));
+}
+
+static inline void out_be16(volatile unsigned short __iomem *addr, u16 val)
+{
+	__asm__ __volatile__("sthcix %1,0,%2" : "=m" (*addr)
+			     : "r" (cpu_to_be16(val)), "r" (addr));
+}
+
+static inline u32 in_le32(const volatile unsigned __iomem *addr)
+{
+	u32 ret;
+
+	__asm__ __volatile__("lwzcix %0,0,%1" : "=r" (ret)
+			     : "r" (addr), "m" (*addr));
+	return ret;
+}
+
+static inline u32 in_be32(const volatile unsigned __iomem *addr)
+{
+	__be32 ret;
+
+	__asm__ __volatile__("lwzcix %0,0,%1" : "=r" (ret)
+			     : "r" (addr), "m" (*addr));
+	return be32_to_cpu(ret);
+}
+
+static inline void out_le32(volatile unsigned __iomem *addr, u32 val)
+{
+	__asm__ __volatile__("stwcix %1,0,%2" : "=m" (*addr)
+			     : "r" (val), "r" (addr));
+}
+
+static inline void out_be32(volatile unsigned __iomem *addr, u32 val)
+{
+	__asm__ __volatile__("stwcix %1,0,%2" : "=m" (*addr)
+			     : "r" (cpu_to_be32(val)), "r" (addr));
+}
+#endif /* PPC64 */
 
 /* Clear and set bits in one shot. These macros can be used to clear and
  * set multiple bits in a register using a single call. These macros can
