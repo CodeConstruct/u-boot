@@ -6,7 +6,6 @@
  */
 
 #include <ppc_asm.tmpl>
-#include <ppc_defs.h>
 #include <asm/u-boot.h>
 
 RELA = 7

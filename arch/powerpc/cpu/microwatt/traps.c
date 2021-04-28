@@ -14,6 +14,7 @@
  */
 
 #include <common.h>
+#include <irq_func.h>
 #include <asm/global_data.h>
 #include <asm/ptrace.h>
 #include <command.h>
@@ -60,9 +61,10 @@ void show_regs(struct pt_regs *regs)
 {
 	int i;
 
-	printf("NIP: %16lX XER: %08lX LR: %16lX REGS:"
-	       " %p TRAP: %04lx DAR: %16lX\n",
-	       regs->nip, regs->xer, regs->link, regs, regs->trap, regs->dar);
+	printf("NIP: %16lX XER: %08lX LR: %16lX\n",
+	       regs->nip, regs->xer, regs->link);
+	printf("REGS: %p TRAP: %04lx DAR: %16lX CFAR: %16lX\n",
+	       regs, regs->trap, regs->dar, regs->orig_gpr3);
 	printf("MSR: %16lx EE: %01x PR: %01x FP:"
 	       " %01x ME: %01x IR/DR: %01x%01x\n",
 	       regs->msr, regs->msr & MSR_EE ? 1 : 0,
@@ -150,4 +152,25 @@ void UnknownException(struct pt_regs *regs)
 	printf("Bad trap at PC: %lx, SR: %lx, vector=%lx\n",
 	       regs->nip, regs->msr, regs->trap);
 	_exception(0, regs);
+}
+
+void interrupt(struct pt_regs *regs)
+{
+	switch (regs->trap) {
+	case 0x200:
+		MachineCheckException(regs);
+		break;
+	case 0x600:
+		AlignmentException(regs);
+		break;
+	case 0x700:
+		ProgramCheckException(regs);
+		break;
+	case 0x900:
+		timer_interrupt(regs);
+		break;
+	default:
+		UnknownException(regs);
+		break;
+	}
 }

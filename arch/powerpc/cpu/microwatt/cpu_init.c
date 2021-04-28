@@ -1,6 +1,7 @@
 #include <common.h>
 #include <init.h>
 #include <asm/global_data.h>
+#include <asm/processor.h>
 
 gd_t *gd = (gd_t *)(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_GBL_DATA_OFFSET);
 
@@ -23,8 +24,17 @@ int cpu_init_r(void)
 	return 0;
 }
 
+extern u32 intr_handler[8];
+extern u32 handle_interrupt[];
+
 void trap_init(unsigned long x)
 {
+	unsigned long vec;
+
+	for (vec = 0x100; vec < 0x1000; vec += 0x100)
+		memcpy((u32 *)vec, intr_handler, 32);
+	__asm__ volatile("isync; icbi 0,0");
+	mtspr(SPRN_SPRG0, (unsigned long) handle_interrupt);
 }
 
 void reloc_and_go(struct global_data *new_gd, ulong relocaddr,
