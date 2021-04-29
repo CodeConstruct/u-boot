@@ -213,6 +213,13 @@ config MESON_SPIFC
 	  This driver can be used to access the SPI NOR flash chips on
 	  Amlogic Meson SoCs.
 
+config MICROWATT_SPI
+        bool "Microwatt SPI Driver"
+	depends on MICROWATT
+	help
+	  Enable support for SPI interface in the Microwatt SOC,
+	  connected to the SPI flash.
+
 config MPC8XX_SPI
 	bool "MPC8XX SPI Driver"
 	depends on MPC8xx

@@ -40,7 +40,6 @@ config MPC8xx
 config MICROWATT
 	bool "Microwatt"
 	select PPC64
-	select ENV_IS_IN_FLASH
 	select CPU_LITTLE_ENDIAN
 
 endchoice

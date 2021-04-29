@@ -136,6 +136,20 @@
 			interrupts = <0x10 0x1>;
 		};
 
+		spi-flash@6000 {
+			compatible = "microwatt-spi-flash";
+			reg = <0x6000 0x10>;
+			clock-frequency = <100000000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			flash@0 {
+				compatible = "spansion,s25fl128s";
+				reg = <0>;
+				spi-max-frequency = <12500000>;
+			};
+		};
+
 		ethernet@8020000 {
 			compatible = "litex,liteeth";
 			reg = <0x8021000 0x100
