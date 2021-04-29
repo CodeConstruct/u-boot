@@ -13,6 +13,8 @@ typedef struct {
 
 #ifdef __KERNEL__
 
+#ifndef CONFIG_PPC64
+
 #define BITS_PER_LONG 32
 
 #ifdef CONFIG_PHYS_64BIT
@@ -30,6 +32,15 @@ typedef unsigned long phys_addr_t;
 typedef unsigned long phys_size_t;
 #endif
 
+#else /* CONFIG_PPC64 */
+
+#define BITS_PER_LONG	64
+
+typedef unsigned long dma_addr_t;
+typedef unsigned long phys_addr_t;
+typedef unsigned long phys_size_t;
+
+#endif /* CONFIG_PPC64 */
 #endif /* __KERNEL__ */
 #endif /* __ASSEMBLY__ */
 
