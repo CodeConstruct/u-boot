@@ -6,4 +6,20 @@ config SYS_BOARD
 config SYS_CONFIG_NAME
 	default "microwatt"
 
+config LITEX_SUPPORT
+	bool "Support Litex peripherals"
+	default y
+	help
+	  This enables the infrastructure for access to Litex peripheral
+	  devices (e.g. litesdcard or liteeth).
+
+config LITEX_SUBREG_SIZE
+	int "Litex sub-register size"
+	depends on LITEX_SUPPORT
+	default 4
+	help
+	  Registers in Litex peripherals are presented as an array of
+	  subregisters of either 1 or 4 bytes; this specifies the size
+	  in bytes of each subregister.  Say 4 if not sure.
+
 endif

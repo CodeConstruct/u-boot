@@ -789,6 +789,15 @@ config MMC_MTK
 	  This is needed if support for any SD/SDIO/MMC devices is required.
 	  If unsure, say N.
 
+config MMC_LITEX
+	bool "Litex litesdcard interface support"
+	depends on LITEX_SUPPORT
+	depends on DM_MMC
+	depends on OF_CONTROL
+	help
+	  This enables support for the litesdcard interface from
+	  the Litex project.
+
 endif
 
 config FSL_ESDHC
