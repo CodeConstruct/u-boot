@@ -13,6 +13,7 @@
 #define CONFIG_BOOTCOMMAND		"run netboot"
 #define CONFIG_BOOTFILE 		"dtbImage.microwatt.elf"
 #define CONFIG_EXTRA_ENV_SETTINGS                                       \
-	"netboot=dhcp && bootelf\0"
+	"netboot=dhcp; bootelf\0" \
+	"autostart=yes\0"
 
 #endif
