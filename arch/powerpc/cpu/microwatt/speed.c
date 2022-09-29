@@ -9,13 +9,12 @@ DECLARE_GLOBAL_DATA_PTR;
 
 int get_clocks(void)
 {
-	/* XXX get from syscon */
-	gd->cpu_clk = 100000000;
-	gd->bus_clk = 100000000;
+	gd->cpu_clk = get_tbclk();
+	gd->bus_clk = get_tbclk();
 	return 0;
 }
 
 int get_serial_clock(void)
 {
-	return gd->cpu_clk = 100000000;
+	return gd->cpu_clk = get_tbclk();
 }

@@ -56,7 +56,8 @@ int do_reset(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 unsigned long
 get_tbclk(void)
 {
-	return 100000000;
+	u32 v = readl(SYSCON_BASE + SYS_REG_CLKINFO);
+	return v & SYS_REG_CLKINFO_FREQ_MASK;
 }
 
 void print_reginfo(void)
@@ -65,8 +66,8 @@ void print_reginfo(void)
 
 int dram_init(void)
 {
-	/* XXX get from syscon? */
-	gd->ram_size = 0x10000000;
+	u32 v = readl(SYSCON_BASE + SYS_REG_DRAMINFO);
+	gd->ram_size = v & SYS_REG_DRAMINFO_SIZE_MASK;
 
 	return 0;
 }
