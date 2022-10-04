@@ -529,6 +529,27 @@ static int mmc_go_idle(struct mmc *mmc)
 	return 0;
 }
 
+static int mmc_go_pre_idle(struct mmc *mmc)
+{
+	struct mmc_cmd cmd;
+	int err;
+
+	udelay(1000);
+
+	cmd.cmdidx = MMC_CMD_GO_IDLE_STATE;
+	cmd.cmdarg = MMC_GO_PRE_IDLE_STATE_ARG;
+	cmd.resp_type = MMC_RSP_NONE;
+
+	err = mmc_send_cmd(mmc, &cmd, NULL);
+
+	if (err)
+		return err;
+
+	udelay(2000);
+
+	return 0;
+}
+
 #if CONFIG_IS_ENABLED(MMC_UHS_SUPPORT)
 static int mmc_switch_voltage(struct mmc *mmc, int signal_voltage)
 {
@@ -2820,6 +2841,13 @@ int mmc_get_op_cond(struct mmc *mmc, bool quiet)
 
 retry:
 	mmc_set_initial_state(mmc);
+
+	err = mmc_go_pre_idle(mmc);
+	if (err) {
+		pr_err("pre_idle error: %d. ignoring.\n", err);
+	} else {
+		pr_info("pre_idle was OK\n");
+	}
 
 	/* Reset the Card */
 	err = mmc_go_idle(mmc);

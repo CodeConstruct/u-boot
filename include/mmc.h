@@ -117,6 +117,8 @@ struct bd_info;
 #define MMC_CMD_SPI_CRC_ON_OFF		59
 #define MMC_CMD_RES_MAN			62
 
+#define MMC_GO_PRE_IDLE_STATE_ARG	0xF0F0F0F0
+
 #define MMC_CMD62_ARG1			0xefac62ec
 #define MMC_CMD62_ARG2			0xcbaea7
 
