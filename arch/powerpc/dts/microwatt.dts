@@ -163,7 +163,7 @@
 			local-mac-address = [ 00 00 00 00 00 00 ];
 		};
 
-		litex-mmc@8040000 {
+		litemmc: litex-mmc@8040000 {
 			compatible = "litex,mmc";
 			reg = <0x8042800 0x800
 			       0x8041000 0x800
