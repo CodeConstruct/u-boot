@@ -65,7 +65,7 @@
 #define SD_BIT_CRC_ERR BIT(3)
 
 #define SD_SLEEP_US       5
-#define SD_TIMEOUT_US 20000
+#define SD_TIMEOUT_US 2000000
 
 #define SD_OK         0
 
