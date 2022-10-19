@@ -392,7 +392,7 @@ static int litex_mmc_probe(struct udevice *dev)
 	 * of LiteSDCard gateware behavior on typical SDCard media
 	 */
 	plat->cfg.f_max = host->ref_clk / 2;
-	plat->cfg.f_min = host->ref_clk / 512;
+	plat->cfg.f_min = 12500000;
 	plat->cfg.b_max = 65535;
 
 	plat->cfg.host_caps = MMC_MODE_4BIT  | MMC_CAP_NEEDS_POLL;
